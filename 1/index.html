@@ -58,25 +58,25 @@
   <h1>CS180 Project 1 by Jacob Goldstein</h1>
 
   <!-- Description -->
-  <p>This project uses image processing techniques on digitzed glass plate images from the Prokudin-Gorskii archive
-    to produce a colored image by alligning what seem to be three black and white photos. Each photo is really a color channel for red, green, and
+  <p>This project uses image processing techniques on digitized glass plate images from the Prokudin-Gorskii archive
+    to produce a colored image by aligning what seem to be three black and white photos. Each photo is really a color channel for red, green, and
     blue. And so the main idea is to find an alignment among the photos, stack them on top of each other, and get the resulting color image. The main challenge comes from alignment. </p>
 
     <p>
     Since the images arent perfectly aligned for stacking, a process needs to be created such that the best alignment is found between images before stacking. The naive
-    method for doing so, that works well for small images like .jpg is using simple displacement. I aligned both the red and the green channels with the blue channel and then stacked.
+    method for doing so, that works well for small images like .jpg, is using simple displacement. I aligned both the red and the green channels with the blue channel and then stacked.
     In order to find the best displacement, I shifted the pixels along a combination of the x and y axis, for a window of [-15,15] and used NCC to calculate how much error resulted from the displacement.
-    The displacement that resulted in the highest NCC score would be the displacement chosen for alignment, for aligning green with blue, and red with blue. Afterwards, a green, red, blue stack could be used 
-    to show the aligned images. Additionally, a crop of 15% on each side of each channel was used to avoid the borders of the image from potentially messing with alignment score calculation.
+    The displacement that resulted in the highest NCC score would be the displacement chosen for alignment. After aligning green with blue and red with blue, a green, red, blue stack could be used 
+    to show the aligned images. Additionally, a crop of 15% on each side of each channel was used to avoid the borders of the image from potentially hindering alignment score calculations.
     <p>
-    While the naive approach can work for jpg images, larger images like tif require a different approach in order to have a feasible runtime. For this, a pyramid algorithm was utilized. The original tif image
-    was recursively downscaled by a factor of 2 until it was 1/8 of the original image, and from the naive approach of searching over a window of this time [-30, 30] was used. The best displacement found would then be relayed to 
-    the above recursive layer which would search for a best displacement over a much smaller window, but around the best displacement found in the recursive call below. This way when the full size image has the best displacement search occur
-    the best displacement is already approximated and the search can be quickened as the window for the upscaled image is smaller than the downscaled version, as the downscaled image can traverse over a larger window much faster.
+    While the naive approach can work for .jpg images, larger images like .tif require a different approach in order to have a feasible runtime. For this, a pyramid algorithm was utilized. The original tif image
+    was recursively downscaled by a factor of 2 until it was 1/8 of the original image. Then, the naive approach of searching over a window of [-30, 30] was used. The best displacement found would then be relayed to 
+    the above recursive layer which would search for a best displacement over a much smaller window, but around the best displacement found in the recursive call below. This way, when the full size image has the best displacement search occur,
+    the best displacement is already approximated and the search can be quickened as the window for the upscaled image is smaller than the downscaled version. This speeds things up as the downscaled image can traverse over a larger window much faster.
     </p>
 
     <p>
-    These processes worked well for most jpg and tif images, except for the emir image which it didn't align well, mostly for the red-blue alignment. This is likely due to large differences in brightness that aren't accounted for between color channels for this specific image.
+    These processes worked well for most .jpg and .tif images except the emir image which didn't align well, mostly for the red-blue alignment. This is likely due to large differences in brightness that aren't accounted for between color channels in this specific image.
     Three additional images are used at the end in addition to the given images for the project. The displacement of each image is shown below the image with G(x,y) being the horizontal and vertical displacement, respectively,
     for the green channel, and R(x, y) being the same for the red channel.
   </p>
